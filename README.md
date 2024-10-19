@@ -8,6 +8,7 @@ This project is a Flask-based Python web application that can be deployed on AWS
 Project Structure
 
 app.py: Simple Python Flask application.
+
 requirements.txt: Lists the Flask dependencies.
 
 Infrastructure

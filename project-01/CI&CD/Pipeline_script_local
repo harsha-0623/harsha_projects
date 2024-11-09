@@ -1,0 +1,49 @@
+node {
+    stage('Git Checkout') {
+        try {
+            git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/rhvreddy/project.git'
+        } catch (Exception e) {
+            error "Git checkout failed: ${e.message}"
+        }
+    }
+
+    stage('Build') {
+        try {
+            // Compile and test the application
+            echo 'Building the application...'
+            // Replace this with your actual build command, e.g., mvn package or npm install
+            sh 'echo Building application...'  // Placeholder command
+            // Optionally run tests during the build
+            sh 'echo Running tests during build...'  // Placeholder for build tests
+        } catch (Exception e) {
+            error "Build failed: ${e.message}"
+        }
+    }
+
+    stage('Test') {
+        try {
+            // Run automated tests to verify code quality
+            echo 'Running automated tests...'
+            // Replace this with your actual test command, e.g., mvn test or npm test
+            sh 'echo Running automated tests...'  // Placeholder for test command
+        } catch (Exception e) {
+            error "Tests failed: ${e.message}"
+        }
+    }
+
+    stage('Deploy') {
+        try {
+            // List the contents of the workspace for debugging
+            sh 'ls -la'
+
+            // Ensure the script is executable
+            sh 'chmod +x assignment.sh'
+
+            // Run the script
+            def cmd = './assignment.sh' // Use ./ to run the script from the current directory
+            sh "${cmd}"
+        } catch (Exception e) {
+            error "Deployment failed: ${e.message}"
+        }
+    }
+}

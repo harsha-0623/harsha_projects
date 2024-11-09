@@ -1,0 +1,45 @@
+node {
+    stage('Git Checkout') {
+        try {
+            git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/rhvreddy/project.git'
+        } catch (Exception e) {
+            error "Git checkout failed: ${e.message}"
+        }
+    }
+
+    stage('Build') {
+        try {
+            // Compile and test the application
+            echo 'Building the application...'
+            // Replace this with your actual build command, e.g., mvn package or npm install
+            sh 'echo Building application...'  // Placeholder command
+            // Optionally run tests during the build
+            sh 'echo Running tests during build...'  // Placeholder for build tests
+        } catch (Exception e) {
+            error "Build failed: ${e.message}"
+        }
+    }
+
+    stage('Test') {
+        try {
+            // Run automated tests to verify code quality
+            echo 'Running automated tests...'
+            // Replace this with your actual test command, e.g., mvn test or npm test
+            sh 'echo Running automated tests...'  // Placeholder for test command
+        } catch (Exception e) {
+            error "Tests failed: ${e.message}"
+        }
+    }
+
+    stage('Deploy') {
+        try {
+            def cmd = 'bash assignment.sh' // Make sure the script name is correct
+            sshagent(['a752503a-e4cd-4c9b-a8a9-d0c41f73e7a2']) {
+                // Deploy to the remote server
+                sh "ssh -o StrictHostKeyChecking=no ubuntu@ec2-18-175-39-195.compute-1.amazonaws.com ${cmd}"
+            }
+        } catch (Exception e) {
+            error "Deployment failed: ${e.message}"
+        }
+    }
+}
